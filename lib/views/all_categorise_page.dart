@@ -66,7 +66,10 @@ class _AllCategoriesPageState extends ConsumerState<AllCategoriesPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Categories')),
+      appBar: AppBar(
+        title: const Text('Categories'),
+        forceMaterialTransparency: true,
+      ),
       body: ListView.separated(
         controller: _scrollController,
         itemCount: state.categories.length,

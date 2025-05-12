@@ -9,6 +9,7 @@ import 'package:bookly_app/router/router.gr.dart';
 import 'package:bookly_app/views/home/widgets/book_card.dart';
 import 'package:bookly_app/views/home/widgets/carousal_widget.dart';
 import 'package:bookly_app/views/home/widgets/categories_section.dart';
+import 'package:bookly_app/views/home/widgets/top_categoris_books.dart';
 import 'package:bookly_app/views/home/widgets/top_rated_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,8 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 24),
             CategoriesSection(),
             const SizedBox(height: 24),
-            FeaturedSection(),
+            // FeaturedSection(),
+            TopCategorisBooks(),
             const SizedBox(height: 24),
             TopRatedSection(),
             const SizedBox(height: 24),
@@ -158,10 +160,10 @@ class _RecommendedSectionState extends ConsumerState<RecommendedSection> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      // final prefs = ref.read(prefsProvider);
-      // final userId = prefs.getString(Constants.userId);
+      final prefs = ref.read(prefsProvider);
+      final userId = prefs.getString(Constants.userId);
       ref.read(getRecommendedBooksProvider.notifier).getRecommendedBooks(
-            userId: '1',
+            userId: userId ?? '',
             // userId: (Random().nextInt(500) + 1).toString(),
           );
     });
@@ -218,7 +220,7 @@ class _RecommendedSectionState extends ConsumerState<RecommendedSection> {
         else if (state.error != null)
           Center(
             child: Text(
-              state.error.toString(),
+              'No',
               style: context.textTheme.bodyMedium,
             ),
           )

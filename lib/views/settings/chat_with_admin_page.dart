@@ -69,6 +69,7 @@ class _ChatWithAdminPageState extends ConsumerState<ChatWithAdminPage> {
     final state = ref.watch(getChatsProvider);
     return Scaffold(
       appBar: AppBar(
+        forceMaterialTransparency: true,
         title: const Text('Chat with Admin'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,

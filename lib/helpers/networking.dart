@@ -52,4 +52,6 @@ class Endpoints {
   static const String getChat = 'message/api';
   static const String sendMessage = 'Message/send-message-to-admin';
   static const String addBook = 'Book/Create/{userId}/{categoryId}';
+  static const String getTopBooksByUserCategories =
+      'Book/GetTopBooksByUserCategories/{userId}';
 }

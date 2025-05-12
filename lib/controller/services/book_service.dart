@@ -59,4 +59,16 @@ class BookService {
       listKey: 'books',
     );
   }
+
+  Future<List<BookModel>> getTopBooksByUserCategories({
+    required String userId,
+  }) async {
+    final res = await client.get<List<dynamic>>(
+      Endpoints.getTopBooksByUserCategories.replaceAll('{userId}', userId),
+    );
+    final books = res.data ?? [];
+    return books
+        .map((json) => BookModel.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
 }

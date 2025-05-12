@@ -44,6 +44,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        forceMaterialTransparency: true,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
@@ -89,8 +90,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               const SizedBox(height: 12),
               HistorySection(title: '$userName\'s History'),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               FavoriteSection(title: '$userName\'s Favorites'),
+              const SizedBox(height: 32),
+              const SizedBox(height: 32),
             ],
           ),
         ),

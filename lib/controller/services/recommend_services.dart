@@ -11,7 +11,7 @@ class RecommendService {
     required String userId,
   }) async {
     final res = await client.get<Map<String, dynamic>>(
-      'https://c7a9-156-204-60-78.ngrok-free.app/recommend_by_book_id/',
+      'https://ba4f-41-237-130-166.ngrok-free.app/recommend_by_book_id/',
       query: {'user_id': userId, 'book_id': bookId},
     );
     final booksJson = res.data?['recommended_books'] as List<dynamic>? ?? [];
@@ -24,7 +24,7 @@ class RecommendService {
     required String userId,
   }) async {
     final endpoint =
-        'https://c7a9-156-204-60-78.ngrok-free.app/generate_recommendations/';
+        'https://ba4f-41-237-130-166.ngrok-free.app/generate_recommendations/';
     final res = await client.get<ApiMap>(
       endpoint,
       query: {'user_id': userId},
