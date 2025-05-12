@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 24),
             CategoriesSection(),
             const SizedBox(height: 24),
-            // FeaturedSection(),
             TopCategorisBooks(),
             const SizedBox(height: 24),
             TopRatedSection(),
@@ -220,13 +219,13 @@ class _RecommendedSectionState extends ConsumerState<RecommendedSection> {
         else if (state.error != null)
           Center(
             child: Text(
-              'No',
+              'No recommended books found',
               style: context.textTheme.bodyMedium,
             ),
           )
         else if (state.recommendedBooks.isEmpty)
           const Center(
-            child: Text('No  books found'),
+            child: Text('No recommended books found'),
           )
         else
           SizedBox(

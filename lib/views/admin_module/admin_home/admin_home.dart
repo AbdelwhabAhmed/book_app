@@ -1,15 +1,20 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:bookly_app/constants/constants.dart';
+import 'package:bookly_app/controller/service_provider.dart';
 import 'package:bookly_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:bookly_app/constants/app_colors.dart';
 import 'package:bookly_app/helpers/context_extension.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
-class AdminHomePage extends StatelessWidget {
+class AdminHomePage extends ConsumerWidget {
   const AdminHomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final prefs = ref.read(prefsProvider);
+    String? userName = prefs.getString(Constants.username);
     return Scaffold(
       backgroundColor: AppColors.scaffoldBGC,
       appBar: AppBar(
@@ -49,7 +54,7 @@ class AdminHomePage extends StatelessWidget {
                         size: 64, color: AppColors.primary),
                     const SizedBox(height: 16),
                     Text(
-                      'Welcome, Admin!',
+                      'Welcome, $userName!',
                       style: context.textTheme.titleLarge?.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -105,8 +110,7 @@ class AdminHomePage extends StatelessWidget {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () =>
-                          context.router.push(const ChatWithAdminRoute()),
+                      onTap: () => context.router.push(const AdminChatRoute()),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 28),
                         margin: const EdgeInsets.symmetric(horizontal: 8),

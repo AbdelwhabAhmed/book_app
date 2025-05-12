@@ -7,17 +7,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 @RoutePage()
-class ChatWithAdminPage extends ConsumerStatefulWidget {
-  const ChatWithAdminPage({super.key});
+class AdminChatPage extends ConsumerStatefulWidget {
+  const AdminChatPage({super.key});
 
   @override
-  ConsumerState<ChatWithAdminPage> createState() => _ChatWithAdminPageState();
+  ConsumerState<AdminChatPage> createState() => _AdminChatPageState();
 }
 
-class _ChatWithAdminPageState extends ConsumerState<ChatWithAdminPage> {
+class _AdminChatPageState extends ConsumerState<AdminChatPage> {
   final TextEditingController _controller = TextEditingController();
   final List<_ChatMessage> _messages = [];
-  bool _adminReplyShown = false;
+  // bool _adminReplyShown = false;
   @override
   void initState() {
     super.initState();
@@ -46,16 +46,16 @@ class _ChatWithAdminPageState extends ConsumerState<ChatWithAdminPage> {
           message: text,
         );
 
-    // Show admin reply only once after the first user message
-    if (!_adminReplyShown) {
-      _adminReplyShown = true;
-      Future.delayed(const Duration(milliseconds: 600), () {
-        setState(() {
-          _messages.add(_ChatMessage(
-              text: 'Bookly Admin will reply soon.', isUser: false));
-        });
-      });
-    }
+    // // Show admin reply only once after the first user message
+    // if (!_adminReplyShown) {
+    //   _adminReplyShown = true;
+    //   Future.delayed(const Duration(milliseconds: 600), () {
+    //     setState(() {
+    //       _messages
+    //           .add(_ChatMessage(text: 'Admin will reply soon.', isUser: false));
+    //     });
+    //   });
+    // }
   }
 
   @override
@@ -70,7 +70,7 @@ class _ChatWithAdminPageState extends ConsumerState<ChatWithAdminPage> {
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
-        title: const Text('Bookly Support'),
+        title: const Text('Admin Chat'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 1,

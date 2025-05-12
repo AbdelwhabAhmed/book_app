@@ -3,6 +3,7 @@ class Constants {
   static const accessToken = '__ACCESS_TOKEN__';
   static const userId = '__USER_ID__';
   static const username = '__USERNAME__';
+  static const role = '__ROLE__';
   static const profilePicture = '__PROFILE_PICTURE__';
   static const sendedMessages = '__SENDED_MESSAGE__';
   static const double textFieldBorderRadius = 16;

@@ -58,7 +58,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         if (next.error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(next.error.toString()),
+              content: Text('check your email or password'),
               backgroundColor: Colors.red,
               behavior: SnackBarBehavior.floating,
             ),
@@ -115,14 +115,21 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 outLineText: 'email',
                 hintText: 'Enter your email',
                 controller: emailController,
-                validator: FormBuilderValidators.required(),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.email(),
+                ]),
               ),
               const SizedBox(height: 16),
               DefaultTextField(
                 outLineText: 'phone number',
                 hintText: 'Enter your phone number',
                 controller: phoneController,
-                validator: FormBuilderValidators.required(),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                  FormBuilderValidators.minLength(11),
+                  FormBuilderValidators.maxLength(11),
+                ]),
               ),
               const SizedBox(height: 16),
               DefaultTextField(

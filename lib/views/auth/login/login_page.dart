@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:bookly_app/cach_data.dart';
 import 'package:bookly_app/components/default_button.dart';
 import 'package:bookly_app/components/default_text_field%20copy.dart';
 import 'package:bookly_app/controller/providers/login_provider.dart';
@@ -28,6 +27,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final List<String> roles = ['User', 'Admin'];
+  int selectedRoleIndex = 0; // 0 for User, 1 for Admin
+
   @override
   void dispose() {
     emailController.dispose();
@@ -41,9 +43,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     await ref
         .read(loginProvider.notifier)
         .login(emailController.text.trim(), passwordController.text.trim());
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId');
-    print(userId);
   }
 
   @override
@@ -56,7 +55,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         if (next.error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(next.error.toString()),
+              content: Text('Invalid email or password'),
               backgroundColor: Colors.red,
               behavior: SnackBarBehavior.floating,
             ),
@@ -73,9 +72,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               behavior: SnackBarBehavior.floating,
             ),
           );
-          // Wait a moment so user can see the message
           await Future.delayed(const Duration(milliseconds: 500));
-          context.router.push(const MainRoute());
+          if (selectedRoleIndex == 0) {
+            context.router.replace(const MainRoute());
+          } else {
+            context.router.replace(const AdminHomeRoute());
+          }
         }
       },
     );
@@ -94,6 +96,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       .copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
+              Center(
+                child: ToggleButtons(
+                  isSelected: [selectedRoleIndex == 0, selectedRoleIndex == 1],
+                  onPressed: (index) {
+                    setState(() {
+                      selectedRoleIndex = index;
+                    });
+                  },
+                  children: roles
+                      .map((role) => Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(role),
+                          ))
+                      .toList(),
+                ),
+              ),
+              const SizedBox(height: 16),
               Assets.images.png.login.image(
                 width: 300,
                 height: 300,
@@ -102,14 +121,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   outLineText: 'Email',
                   hintText: 'Enter your email',
                   controller: emailController,
-                  validator: FormBuilderValidators.required()),
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.email(),
+                  ])),
               const SizedBox(height: 16),
               DefaultTextField(
                   outLineText: 'Password',
                   hintText: 'Enter your password',
                   controller: passwordController,
                   isPassword: true,
-                  validator: FormBuilderValidators.required()),
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                    FormBuilderValidators.minLength(8),
+                  ])),
               const SizedBox(height: 50),
               DefaultButton(
                 title: 'Login',

@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:bookly_app/components/default_button.dart';
 import 'package:bookly_app/constants/app_colors.dart';
+import 'package:bookly_app/constants/constants.dart';
 import 'package:bookly_app/controller/providers/categories_provider.dart';
+import 'package:bookly_app/controller/service_provider.dart';
 import 'package:bookly_app/helpers/context_extension.dart';
 import 'package:bookly_app/helpers/scroll_helpers.dart';
 import 'package:bookly_app/model/categories/category_model.dart';
@@ -23,7 +25,7 @@ class SelectionPage extends ConsumerStatefulWidget {
 
 class _SelectionPageState extends ConsumerState<SelectionPage> {
   final Set<String> selectedGenres = {};
-  final int minimumGenres = 3;
+  final int maxGenres = 3;
   late ScrollController _scrollController;
 
   @override
@@ -60,17 +62,18 @@ class _SelectionPageState extends ConsumerState<SelectionPage> {
     setState(() {
       if (selectedGenres.contains(genre)) {
         selectedGenres.remove(genre);
-      } else {
+      } else if (selectedGenres.length < maxGenres) {
         selectedGenres.add(genre);
       }
     });
   }
 
   void submit() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId');
+    final prefs = ref.read(prefsProvider);
+    final userId = prefs.getString(Constants.userId);
     try {
-      ref.read(getCategoriesProvider.notifier).selectCategories(
+      // Await the async operation!
+      await ref.read(getCategoriesProvider.notifier).selectCategories(
             categoryIds: selectedGenres.toList(),
             userId: userId!,
           );
@@ -111,7 +114,7 @@ class _SelectionPageState extends ConsumerState<SelectionPage> {
               const SizedBox(height: 24),
               GenresCounter(
                 selectedCount: selectedGenres.length,
-                minimumGenres: minimumGenres,
+                maxGenres: maxGenres,
               ),
               const SizedBox(height: 24),
               Expanded(
@@ -126,7 +129,7 @@ class _SelectionPageState extends ConsumerState<SelectionPage> {
               const SizedBox(height: 16),
               DefaultButton(
                 title: 'Next',
-                enable: selectedGenres.length >= minimumGenres,
+                enable: selectedGenres.length >= maxGenres,
                 onPressed: submit,
               ),
             ],
@@ -242,18 +245,18 @@ class GenreItem extends StatelessWidget {
 
 class GenresCounter extends StatelessWidget {
   final int selectedCount;
-  final int minimumGenres;
+  final int maxGenres;
 
   const GenresCounter({
     super.key,
     required this.selectedCount,
-    required this.minimumGenres,
+    required this.maxGenres,
   });
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      '$selectedCount/$minimumGenres minimum',
+      '$selectedCount/$maxGenres maximum',
       style: const TextStyle(
         fontSize: 16,
         color: Colors.black,

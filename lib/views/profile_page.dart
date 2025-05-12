@@ -145,7 +145,7 @@ class _FavoriteSectionState extends ConsumerState<FavoriteSection> {
         if (state.isLoading)
           const Center(child: CircularProgressIndicator())
         else if (state.error != null)
-          Center(child: Text(state.error!.toString()))
+          Center(child: Text('No favorites found'))
         else
           SizedBox(
             height: 320,
@@ -221,7 +221,7 @@ class _HistorySectionState extends ConsumerState<HistorySection> {
         if (state.isLoading)
           const Center(child: CircularProgressIndicator())
         else if (state.error != null)
-          Center(child: Text(state.error!.toString()))
+          Center(child: Text('No history found'))
         else
           SizedBox(
             height: 320,

@@ -47,6 +47,7 @@ class LoginProvider extends StateNotifier<LoginState> {
         await prefs.setString(Constants.userId, user.id);
         await prefs.setString(Constants.username, user.username);
         await prefs.setString(Constants.profilePicture, user.profilePicture);
+        await prefs.setString(Constants.role, user.isAdmin.toString());
       }
       state = state.copyWith(isLoading: false, message: 'Login successful');
     } on Exception catch (e) {
