@@ -3,10 +3,15 @@ import 'package:bookly_app/constants/app_colors.dart';
 import 'package:bookly_app/helpers/context_extension.dart';
 import 'package:bookly_app/router/router.gr.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 @RoutePage()
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  Future<void> _shareApp() async {
+    await Share.share('Share the app');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +54,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   trailing: Icon(Icons.arrow_forward_ios,
                       size: 16, color: AppColors.primary),
-                  onTap: () {
-                    // TODO: Implement share
-                  },
+                  onTap: _shareApp,
                 ),
                 const Divider(height: 1),
                 ListTile(
@@ -63,7 +66,7 @@ class SettingsPage extends StatelessWidget {
                   trailing: Icon(Icons.arrow_forward_ios,
                       size: 16, color: AppColors.primary),
                   onTap: () {
-                    // TODO: Show terms
+                    context.router.push(const TermsAndConditionsRoute());
                   },
                 ),
                 const Divider(height: 1),
@@ -76,7 +79,7 @@ class SettingsPage extends StatelessWidget {
                   trailing: Icon(Icons.arrow_forward_ios,
                       size: 16, color: AppColors.primary),
                   onTap: () {
-                    // TODO: Show privacy policy
+                    context.router.push(const PrivacyPolicyRoute());
                   },
                 ),
               ],
@@ -101,23 +104,9 @@ class SettingsPage extends StatelessWidget {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: Icon(Icons.language, color: AppColors.primary),
+                  leading: Icon(Icons.chat, color: AppColors.primary),
                   title: Text(
-                    'Change language',
-                    style: TextStyle(color: AppColors.primary),
-                  ),
-                  trailing: Icon(Icons.arrow_forward_ios,
-                      size: 16, color: AppColors.primary),
-                  onTap: () {
-                    // TODO: Show language picker
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading:
-                      Icon(Icons.contact_support, color: AppColors.primary),
-                  title: Text(
-                    'Contact us',
+                    'Chat with admin',
                     style: TextStyle(color: AppColors.primary),
                   ),
                   trailing: Icon(Icons.arrow_forward_ios,

@@ -16,12 +16,8 @@ class BottomNavBarData {
         title: 'Home',
       ),
       BottomNavBarData(
-        icon: Icons.home,
-        title: 'Home',
-      ),
-      BottomNavBarData(
-        icon: Icons.settings,
-        title: 'Settings',
+        icon: Icons.search,
+        title: 'Search',
       ),
       BottomNavBarData(
         icon: Icons.person,

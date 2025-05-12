@@ -1,5 +1,7 @@
 import 'package:bookly_app/constants/app_colors.dart';
+import 'package:bookly_app/constants/constants.dart';
 import 'package:bookly_app/controller/providers/chat_provider.dart';
+import 'package:bookly_app/controller/service_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,20 +21,31 @@ class _ChatWithAdminPageState extends ConsumerState<ChatWithAdminPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(getChatsProvider.notifier).getChats(
-            userId: '16d467fe-f875-4cb9-919b-07cca23bedf3',
-          );
-    });
+    final prefs = ref.read(prefsProvider);
+    final userId = prefs.getString(Constants.userId);
+    // Future.microtask(() {
+    //   ref.read(getChatsProvider.notifier).getChats(
+    //         userId: userId!,
+    //       );
+    // });
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
+
     setState(() {
       _messages.add(_ChatMessage(text: text, isUser: true));
     });
     _controller.clear();
+
+    final prefs = ref.read(prefsProvider);
+    final userId = prefs.getString(Constants.userId);
+    await ref.read(getChatsProvider.notifier).sendMessage(
+          userId: userId!,
+          message: text,
+        );
+
     // Show admin reply only once after the first user message
     if (!_adminReplyShown) {
       _adminReplyShown = true;
@@ -82,7 +95,7 @@ class _ChatWithAdminPageState extends ConsumerState<ChatWithAdminPage> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
-                      state.chats.first.lastMessage,
+                      msg.text,
                       style: TextStyle(
                         color: msg.isUser ? Colors.white : Colors.black,
                         fontSize: 16,

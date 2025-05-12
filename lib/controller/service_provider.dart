@@ -1,3 +1,4 @@
+import 'package:bookly_app/controller/services/add_book_service.dart';
 import 'package:bookly_app/controller/services/auth_service.dart';
 import 'package:bookly_app/controller/services/book_service.dart';
 import 'package:bookly_app/controller/services/categories_service.dart';
@@ -68,4 +69,8 @@ final searchServiceProvider = Provider<SearchService>(
 
 final chatServiceProvider = Provider<ChatService>(
   (ref) => ChatService(ref.read(httpClient)),
+);
+
+final addBookServiceProvider = Provider<AddBookService>(
+  (ref) => AddBookService(ref.read(httpClient)),
 );

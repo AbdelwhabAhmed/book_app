@@ -1,5 +1,6 @@
 import 'package:bookly_app/views/home/home_page.dart';
 import 'package:bookly_app/views/profile_page.dart';
+import 'package:bookly_app/views/search/search_page.dart';
 import 'package:bookly_app/views/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +13,8 @@ class NavigationNotifier extends ChangeNotifier {
   NavigationNotifier() {
     screens = [
       const HomePage(),
-      const HomePage(),
+      const SearchPage(),
       ProfilePage(),
-      const SettingsPage(),
     ];
   }
 

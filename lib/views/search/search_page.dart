@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:bookly_app/cach_data.dart';
 import 'package:bookly_app/constants/app_colors.dart';
 import 'package:bookly_app/controller/providers/search_provider.dart';
 import 'package:bookly_app/helpers/scroll_helpers.dart';

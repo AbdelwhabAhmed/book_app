@@ -50,4 +50,6 @@ class Endpoints {
   static const String getHistory = 'History/{userId}';
   static const String addHistory = 'History/add';
   static const String getChat = 'message/api';
+  static const String sendMessage = 'Message/send-message-to-admin';
+  static const String addBook = 'Book/Create/{userId}/{categoryId}';
 }

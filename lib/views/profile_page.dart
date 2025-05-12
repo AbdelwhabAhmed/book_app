@@ -1,10 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:bookly_app/cach_data.dart';
 import 'package:bookly_app/constants/constants.dart';
-import 'package:bookly_app/controller/providers/all_books_provider.dart';
 import 'package:bookly_app/controller/providers/get_favorite_provider.dart';
 import 'package:bookly_app/controller/providers/history_provider.dart';
-import 'package:bookly_app/controller/providers/user_provider.dart';
 import 'package:bookly_app/controller/service_provider.dart';
 import 'package:bookly_app/controller/services/auth_service.dart';
 import 'package:bookly_app/helpers/context_extension.dart';
@@ -15,7 +12,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 @RoutePage()
 class ProfilePage extends ConsumerStatefulWidget {
@@ -34,7 +30,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void initState() {
     super.initState();
     getUser();
-    ref.read(getUserProvider.notifier).getUser();
   }
 
   void getUser() async {
@@ -45,7 +40,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(getUserProvider);
     print(userName);
     return Scaffold(
       backgroundColor: Colors.white,

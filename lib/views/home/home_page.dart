@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:bookly_app/constants/app_colors.dart';
+import 'package:bookly_app/constants/constants.dart';
 import 'package:bookly_app/controller/providers/all_books_provider.dart';
 import 'package:bookly_app/controller/providers/recommended_provider.dart';
+import 'package:bookly_app/controller/service_provider.dart';
 import 'package:bookly_app/helpers/context_extension.dart';
 import 'package:bookly_app/router/router.gr.dart';
 import 'package:bookly_app/views/home/widgets/book_card.dart';
@@ -10,7 +12,6 @@ import 'package:bookly_app/views/home/widgets/categories_section.dart';
 import 'package:bookly_app/views/home/widgets/top_rated_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 @RoutePage()
 class HomePage extends StatefulWidget {
@@ -157,12 +158,12 @@ class _RecommendedSectionState extends ConsumerState<RecommendedSection> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getString('userId');
+      // final prefs = ref.read(prefsProvider);
+      // final userId = prefs.getString(Constants.userId);
       ref.read(getRecommendedBooksProvider.notifier).getRecommendedBooks(
-            userId: userId ?? '',
+            userId: '1',
+            // userId: (Random().nextInt(500) + 1).toString(),
           );
-      print(userId);
     });
   }
 
@@ -188,27 +189,32 @@ class _RecommendedSectionState extends ConsumerState<RecommendedSection> {
         ),
         if (state.isLoading)
           const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 32.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(
-                    color: AppColors.primary,
-                  ),
-                  SizedBox(height: 24),
-                  Text(
-                    'Please wait while we analyze your data...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ],
-              ),
+            child: CircularProgressIndicator(
+              color: AppColors.primary,
             ),
           )
+        // const Center(
+        //   child: Padding(
+        //     padding: EdgeInsets.symmetric(vertical: 32.0),
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         CircularProgressIndicator(
+        //           color: AppColors.primary,
+        //         ),
+        //         SizedBox(height: 24),
+        //         Text(
+        //           'Please wait while we analyze your data...',
+        //           style: TextStyle(
+        //             fontSize: 16,
+        //             fontWeight: FontWeight.w500,
+        //             color: AppColors.primary,
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // )
         else if (state.error != null)
           Center(
             child: Text(

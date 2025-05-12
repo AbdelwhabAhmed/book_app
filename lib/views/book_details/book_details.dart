@@ -2,12 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bookly_app/components/default_button.dart';
 import 'package:bookly_app/constants/app_colors.dart';
 import 'package:bookly_app/constants/constants.dart';
+import 'package:bookly_app/controller/providers/similier_books.provider.dart';
 import 'package:bookly_app/controller/service_provider.dart';
 import 'package:bookly_app/controller/providers/all_books_provider.dart';
 import 'package:bookly_app/controller/providers/get_favorite_provider.dart';
 import 'package:bookly_app/controller/providers/history_provider.dart';
 import 'package:bookly_app/helpers/context_extension.dart';
 import 'package:bookly_app/model/book_model/book_model.dart';
+import 'package:bookly_app/router/router.gr.dart';
+import 'package:bookly_app/views/home/widgets/book_card.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -229,37 +232,6 @@ class _BookDetailsState extends ConsumerState<BookDetailsPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Categories
-                        // SizedBox(
-                        //   height: 40,
-                        //   child: ListView.builder(
-                        //     scrollDirection: Axis.horizontal,
-                        //     itemCount: categories.length,
-                        //     itemBuilder: (context, index) {
-                        //       return Container(
-                        //         margin: const EdgeInsets.only(right: 12),
-                        //         padding: const EdgeInsets.symmetric(
-                        //             horizontal: 20, vertical: 8),
-                        //         decoration: BoxDecoration(
-                        //           color: index == 0
-                        //               ? AppColors.primary
-                        //               : Colors.grey.withOpacity(0.1),
-                        //           borderRadius: BorderRadius.circular(20),
-                        //         ),
-                        //         child: Text(
-                        //           categories[index],
-                        //           style: TextStyle(
-                        //             color: index == 0
-                        //                 ? Colors.white
-                        //                 : Colors.black,
-                        //             fontSize: 16,
-                        //           ),
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 20),
                         DefaultButton(
                           title: 'Read Now',
                           onPressed: () async {
@@ -274,7 +246,9 @@ class _BookDetailsState extends ConsumerState<BookDetailsPage> {
                           onTap: () {
                             showDialog(
                               context: context,
-                              builder: (context) => RateBookDialog(),
+                              builder: (context) => RateBookDialog(
+                                onSubmit: addReview,
+                              ),
                             );
                           },
                           child: Container(
@@ -324,38 +298,7 @@ class _BookDetailsState extends ConsumerState<BookDetailsPage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-
-                        SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: similarBooks.length,
-                            itemBuilder: (context, index) {
-                              final book = similarBooks[index];
-                              return Container(
-                                width: 120,
-                                margin: const EdgeInsets.only(right: 16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: CachedNetworkImage(
-                                          imageUrl: book['imageUrl'],
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-
-                        const SizedBox(height: 24),
+                        SimilarBooksSection(bookId: widget.book.id),
                       ],
                     ),
                   ),
@@ -370,7 +313,8 @@ class _BookDetailsState extends ConsumerState<BookDetailsPage> {
 }
 
 class RateBookDialog extends StatefulWidget {
-  const RateBookDialog({super.key});
+  final VoidCallback onSubmit;
+  const RateBookDialog({super.key, required this.onSubmit});
 
   @override
   _RateBookDialogState createState() => _RateBookDialogState();
@@ -417,8 +361,7 @@ class _RateBookDialogState extends State<RateBookDialog> {
                     });
                   }
                 });
-                // Optionally call your addReview() here
-                // addReview();
+                widget.onSubmit();
               },
             ),
       actions: [
@@ -426,6 +369,102 @@ class _RateBookDialogState extends State<RateBookDialog> {
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text('Close'),
+          ),
+      ],
+    );
+  }
+}
+
+class SimilarBooksSection extends ConsumerStatefulWidget {
+  final String bookId;
+  const SimilarBooksSection({super.key, required this.bookId});
+
+  @override
+  ConsumerState<SimilarBooksSection> createState() =>
+      _SimilarBooksSectionState();
+}
+
+class _SimilarBooksSectionState extends ConsumerState<SimilarBooksSection> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      final prefs = ref.read(prefsProvider);
+      final userId = prefs.getString(Constants.userId);
+      ref.read(getSimilarBooksProvider.notifier).getSimilarBooks(
+            userId: userId ?? '',
+            bookId: widget.bookId,
+          );
+      print(userId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(getSimilarBooksProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (state.isLoading)
+          const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 32.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(
+                    color: AppColors.primary,
+                  ),
+                  SizedBox(height: 24),
+                  Text(
+                    'Please wait while we analyze your data...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else if (state.error != null)
+          Center(
+            child: Text(
+              state.error.toString(),
+              style: context.textTheme.bodyMedium,
+            ),
+          )
+        else if (state.similarBooks.isEmpty)
+          const Center(
+            child: Text('No  books found'),
+          )
+        else
+          SizedBox(
+            height: 320,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: state.similarBooks.length,
+              itemBuilder: (context, index) {
+                final book = state.similarBooks[index];
+                return Container(
+                  width: 160,
+                  margin: EdgeInsets.only(
+                    right: index == state.similarBooks.length - 1 ? 0 : 16,
+                  ),
+                  child: BookCard(
+                    book: book,
+                    onTap: () {
+                      context.router.push(BookDetailsRoute(
+                        book: book,
+                      ));
+                    },
+                  ),
+                );
+              },
+            ),
           ),
       ],
     );

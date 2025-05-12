@@ -17,6 +17,7 @@ class AppRouter extends RootStackRouter {
         ),
         AutoRoute(
           page: LoginRoute.page,
+          // initial: true,
         ),
         AutoRoute(
           page: RegisterRoute.page,
@@ -39,5 +40,12 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: CategoryBooksRoute.page),
         AutoRoute(page: ChatWithAdminRoute.page),
         AutoRoute(page: ProfileRoute.page),
+        AutoRoute(page: PrivacyPolicyRoute.page),
+        AutoRoute(page: TermsAndConditionsRoute.page),
+        AutoRoute(
+          page: AdminHomeRoute.page,
+        ),
+        AutoRoute(page: AdminAddBookRoute.page),
+        AutoRoute(page: AdminCategoriesRoute.page),
       ];
 }
