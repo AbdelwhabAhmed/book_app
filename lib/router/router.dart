@@ -14,13 +14,13 @@ class AppRouter extends RootStackRouter {
   List<AutoRoute> get routes => [
         AutoRoute(
           page: SplashRoute.page,
+          initial: true,
         ),
         AutoRoute(
           page: LoginRoute.page,
         ),
         AutoRoute(
           page: RegisterRoute.page,
-          initial: true,
         ),
         AutoRoute(
           page: MainRoute.page,

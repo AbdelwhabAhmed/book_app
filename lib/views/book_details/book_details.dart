@@ -431,7 +431,7 @@ class _SimilarBooksSectionState extends ConsumerState<SimilarBooksSection> {
         else if (state.error != null)
           Center(
             child: Text(
-              state.error.toString(),
+              'No similar books found',
               style: context.textTheme.bodyMedium,
             ),
           )
