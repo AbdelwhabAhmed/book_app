@@ -207,8 +207,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Abdelwhab Ahmed**
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
+- GitHub: (https://github.com/AbdelwhabAhmed)
+- LinkedIn: (https://www.linkedin.com/in/abdelwhab-ahmed-323976262/)
 
 ## 🙏 Acknowledgments
 
